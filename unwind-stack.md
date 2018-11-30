@@ -53,7 +53,7 @@ There're at least two cases for compilers won't follow this elegant frame stack,
 
 ## Unwinding stack in real world
 How can we unwind stack without a frame pointer?
-The modern way to specify unwind information is in the `.debug_frame` section. But we never ship `.debug_frame` to release build, the compiler will use similar but much smaller sections to help use unwind. On x86 & ARMv8 platfomr they're `.eh_frame` and `.eh_frame_hdr`.`.ARM.extab` and `.ARM.exidx` are for ARM32. They're quite similar, we only discuss `.eh_frame` in follow-up. If you're interested on `.ARM.extab`, you can check [<ARM-Unwinding-Tutorial>](https://sourceware.org/binutils/docs/as/ARM-Unwinding-Tutorial.html)
+The modern way to specify unwind information is in the `.debug_frame` section. But we never ship `.debug_frame` to release build, the compiler will use similar but much smaller sections to help use unwind. On x86 & ARMv8 platfomr they're `.eh_frame` and `.eh_frame_hdr`.`.ARM.extab` and `.ARM.exidx` are for ARM32. They're quite similar, we only discuss `.eh_frame` in follow-up. If you're interested on `.ARM.extab`, you can check [ARM-Unwinding-Tutorial](https://sourceware.org/binutils/docs/as/ARM-Unwinding-Tutorial.html).
 
 
 ### ".eh_frame" and ".eh_frame_hdr"
