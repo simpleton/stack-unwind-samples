@@ -3,12 +3,12 @@ If we wanna understand how to unwind the stack, we need know how the system invo
 
 ![Function Invoking Flow](art/function_invokeing.svg)
 
-(1) We're in `func main()` and prepare to invoke `func foo()`, caller pushes parameters in the reverse order before executing the call instruction.(The first param is at top of the stack at the time of the Call)
-(2) Invoke `call foo()`, push $EIP to stack and load the address of `foo()` to EIP
-(3) Enter `foo()`, and run prolog that will push old EBP, and assign current EBP to ESP to form a new function stack.
-(4) Execute `foo()` body.
-(5) Finish executing `foo()` and prepare return, run epilog to restore ESP and EBP to their old values
-(6) Execute ret, pop current stack top to %EIP and ESP $n*4 to pop all parameters and execute post instrument.
+* (1) We're in `func main()` and prepare to invoke `func foo()`, caller pushes parameters in the reverse order before executing the call instruction.(The first param is at top of the stack at the time of the Call)
+* (2) Invoke `call foo()`, push $EIP to stack and load the address of `foo()` to EIP
+* (3) Enter `foo()`, and run prolog that will push old EBP, and assign current EBP to ESP to form a new function stack.
+* (4) Execute `foo()` body.
+* (5) Finish executing `foo()` and prepare return, run epilog to restore ESP and EBP to their old values
+* (6) Execute ret, pop current stack top to %EIP and ESP $n*4 to pop all parameters and execute post instrument.
 
 All the registers are named using x86, here is the name mapping for ARM:
 ```
@@ -53,7 +53,7 @@ There're at least two cases for compilers won't follow this elegant frame stack,
 
 ## Unwinding stack in real world
 How can we unwind stack without a frame pointer?
-The modern way to specify unwind information is in the `.debug_frame` section. But we never ship `.debug_frame` to release build, the compiler will use some similar but some section to help use unwind. On x86 & ARMv8 platfomr they're `.eh_frame` and `.eh_frame_hdr`.`.ARM.extab` and `.ARM.exidx` are for ARM32. They're quite similar, we only discuss `.eh_frame` in follow-up. If you're interested on `.ARM.extab`, you can check [<ARM-Unwinding-Tutorial>](https://sourceware.org/binutils/docs/as/ARM-Unwinding-Tutorial.html)
+The modern way to specify unwind information is in the `.debug_frame` section. But we never ship `.debug_frame` to release build, the compiler will use similar but much smaller sections to help use unwind. On x86 & ARMv8 platfomr they're `.eh_frame` and `.eh_frame_hdr`.`.ARM.extab` and `.ARM.exidx` are for ARM32. They're quite similar, we only discuss `.eh_frame` in follow-up. If you're interested on `.ARM.extab`, you can check [<ARM-Unwinding-Tutorial>](https://sourceware.org/binutils/docs/as/ARM-Unwinding-Tutorial.html)
 
 
 ### ".eh_frame" and ".eh_frame_hdr"
