@@ -1,14 +1,14 @@
 ## Unwinding stack in school
-If we wanna understand how to unwind the stack, we need know how the system invoke a function. Let's recall some memory from school.
+If we wanna understand how to unwind the stack, We need know how the system invokes a function. Let's recall some memory from the school.
 
 ![Function Invoking Flow](art/function_invokeing.svg)
 
-* (1) We're in `func main()` and prepare to invoke `func foo()`, caller pushes parameters in the reverse order before executing the call instruction.(The first param is at top of the stack at the time of the Call)
+* (1) We're in `func main()` and prepare to invoke `func foo()`, caller pushes parameters in the reverse order before executing the call instruction.(The first param is at the top of the stack at the time of the Call)
 * (2) Invoke `call foo()`, push $EIP to stack and load the address of `foo()` to EIP
 * (3) Enter `foo()`, and run prolog that will push old EBP, and assign current EBP to ESP to form a new function stack.
 * (4) Execute `foo()` body.
 * (5) Finish executing `foo()` and prepare return, run epilog to restore ESP and EBP to their old values
-* (6) Execute ret, pop current stack top to %EIP and ESP $n*4 to pop all parameters and execute post instrument.
+* (6) Execute ret, pop current stack top to %EIP and ESP $n*4 to pop all parameters and execute post instructions.
 
 All the registers are named using x86, here is the name mapping for ARM:
 ```
@@ -19,7 +19,7 @@ SP (r13) – Stack Pointer (ESP on x86).
 LR (r14) – Link Register.  Used as a return address to the caller.
 ```
 
-Lets' zoom up the stack, it will much clear on the big picture.
+Lets' zoom up the stack, it will be much clearer on the big picture.
 
 ![Function Frame Big Picture](art/function_frame_big_pic.svg)
 
